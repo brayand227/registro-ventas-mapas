@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registro de Ventas</title>
+</head>
+<body>
+
+<h1>Registro de Ventas</h1>
+
+<!-- 🔽 selector de repositorio -->
+<form method="get" th:action="@{/ventas}">
+    <select name="tipo" th:value="${tipoActual}">
+        <option value="ventaRepositoryHashMap">HashMap</option>
+        <option value="ventaRepositoryLinkedHashMap">LinkedHashMap</option>
+        <option value="ventaRepositoryTreeMap">TreeMap</option>
+    </select>
+    <button type="submit">Cambiar estructura</button>
+</form>
+
+<hr>
+
+<h2>Agregar Venta</h2>
+
+<!-- ⭐ formulario dinámico -->
+<form th:action="@{/ventas/guardar}" method="post" th:object="${venta}">
+    
+    <input type="hidden" name="tipo" th:value="${tipoActual}" />
+
+    <label>Producto:</label>
+    <input type="text" th:field="*{nombreProducto}" required />
+    <br><br>
+
+    <label>Código:</label>
+    <input type="text" th:field="*{codigoProducto}" required />
+    <br><br>
+
+    <label>Cantidad:</label>
+    <input type="number" th:field="*{cantidadVendida}" required />
+    <br><br>
+
+    <label>Precio:</label>
+    <input type="number" step="0.01" th:field="*{precio}" required />
+    <br><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<hr>
+
+<h2>Listado</h2>
+
+<table border="1">
+    <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+    </tr>
+
+    <tr th:each="v : ${ventas}">
+        <td th:text="${v.codigoProducto}"></td>
+        <td th:text="${v.nombreProducto}"></td>
+        <td th:text="${v.cantidadVendida}"></td>
+        <td th:text="${v.valorTotal}"></td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -12,12 +12,11 @@ import com.ventas.registroventas.model.Venta;
 
 @Repository("ventaRepositoryTreeMap")
 public class VentaRepositoryTreeMap implements VentaRepository {
-    private Map<Long, Venta> datos = new TreeMap<>();
-    private Long secuencia = 1L;
+    private Map<String, Venta> datos = new TreeMap<>();
+   
 
     @Override
     public Venta guardar(Venta venta) {
-        venta.setCodigoProducto(secuencia++);
         datos.put(venta.getCodigoProducto(), venta);
         return venta;
     }
@@ -28,8 +27,10 @@ public class VentaRepositoryTreeMap implements VentaRepository {
     }
 
     @Override
-    public Optional<Venta> buscarPorCodigo(Long codigoProducto) {
+    public Optional<Venta> buscarPorCodigo(String codigoProducto) {
         return Optional.ofNullable(datos.get(codigoProducto));
     }
+
+    
 
 }

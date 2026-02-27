@@ -10,6 +10,8 @@ public interface VentaRepository {
 
     List<Venta> listar();
 
-    Optional<Venta> buscarPorCodigo(Long codigoProducto);
+    Optional<Venta> buscarPorCodigo(String codigoProducto);
+
+    
 
 }

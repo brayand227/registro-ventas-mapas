@@ -4,21 +4,19 @@ import com.ventas.registroventas.model.Venta;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
 @Repository("ventaRepositoryHashMap")
 public class VentaRepositoryHashMap implements VentaRepository {
 
-    private Map<Long, Venta> datos = new HashMap<>();
-    private Long secuencia = 1L;
+    private Map<String, Venta> datos = new HashMap<>();
 
     @Override
     public Venta guardar(Venta venta) {
-        venta.setCodigoProducto(secuencia++);
         datos.put(venta.getCodigoProducto(), venta);
         return venta;
     }
@@ -29,8 +27,9 @@ public class VentaRepositoryHashMap implements VentaRepository {
     }
 
     @Override
-    public Optional<Venta> buscarPorCodigo(Long codigoProducto) {
+    public Optional<Venta> buscarPorCodigo(String codigoProducto) {
         return Optional.ofNullable(datos.get(codigoProducto));
     }
 
+  
 }

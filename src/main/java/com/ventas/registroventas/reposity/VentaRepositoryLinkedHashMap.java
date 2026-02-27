@@ -11,13 +11,12 @@ import org.springframework.stereotype.Repository;
 import com.ventas.registroventas.model.Venta;
 
 @Repository("ventaRepositoryLinkedHashMap")
-public class VentaRepositoyLinkedHashMap implements VentaRepository {
-    private Map<Long, Venta> datos = new LinkedHashMap<>();
-    private Long secuencia = 1L;
+public class VentaRepositoryLinkedHashMap implements VentaRepository {
+    private Map<String, Venta> datos = new LinkedHashMap<>();
 
     @Override
     public Venta guardar(Venta venta) {
-        venta.setCodigoProducto(secuencia++);
+
         datos.put(venta.getCodigoProducto(), venta);
         return venta;
     }
@@ -28,7 +27,8 @@ public class VentaRepositoyLinkedHashMap implements VentaRepository {
     }
 
     @Override
-    public Optional<Venta> buscarPorCodigo(Long codigoProducto) {
+    public Optional<Venta> buscarPorCodigo(String codigoProducto) {
         return Optional.ofNullable(datos.get(codigoProducto));
     }
+
 }

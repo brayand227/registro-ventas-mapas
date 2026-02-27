@@ -1,34 +1,46 @@
 package com.ventas.registroventas.controller;
 
+import com.ventas.registroventas.model.Venta;
+import com.ventas.registroventas.reposity.VentaRepository;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.ventas.registroventas.model.Venta;
-import com.ventas.registroventas.servicio.VentaService;
+import java.util.Map;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequestMapping("/ventas")
 public class VentaController {
 
-    private final VentaService ventaService;
+    private final Map<String, VentaRepository> repositorios;
 
-    public VentaController(VentaService ventaService) {
-        this.ventaService = ventaService;
-    }
-
-    @PostMapping
-    public Venta guardarVenta(@RequestBody Venta venta) {
-        return ventaService.guardar(venta);
+    public VentaController(Map<String, VentaRepository> repositorios) {
+        this.repositorios = repositorios;
     }
 
     @GetMapping
-    public List<Venta> listarTodas() {
-        return ventaService.listar();
+    public String listarVentas(
+            @RequestParam(defaultValue = "ventaRepositoryHashMap") String tipo,
+            Model model) {
+
+        VentaRepository repo = repositorios.get(tipo);
+
+        model.addAttribute("ventas", repo.listar());
+        model.addAttribute("venta", new Venta()); // ⭐ para el formulario
+        model.addAttribute("tipoActual", tipo);
+
+        return "lista";
     }
 
-    @GetMapping("/{codigo}")
-    public Venta buscarPorCodigo(@PathVariable Long codigo) {
-        return ventaService.buscarPorCodigo(codigo);
+    @PostMapping("/guardar")
+    public String guardarVenta(
+            @ModelAttribute Venta venta,
+            @RequestParam String tipo) {
+
+        VentaRepository repo = repositorios.get(tipo);
+        repo.guardar(venta);
+
+    
+        return "redirect:/ventas?tipo=" + tipo;
     }
 }
